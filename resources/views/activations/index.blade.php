@@ -265,11 +265,6 @@
             }
         });
 
-        // 3. AUTO RELOAD SETIAP 30 DETIK (Cek Expiration Otomatis)
-        setInterval(function() {
-            table.ajax.reload(null, false); // false agar posisi paging tidak reset
-        }, 30000);
-
         // 4. LOGIKA TOMBOL GENERATE (Ganti bagian ini di index.blade.php Anda)
 $(document).on('click', '.btn-generate', function() {
     let id = $(this).data('id');
