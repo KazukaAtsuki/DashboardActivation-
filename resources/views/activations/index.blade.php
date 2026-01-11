@@ -301,18 +301,31 @@ $(document).on('click', '.btn-generate', function() {
 });
 
         // 5. LOGIKA TOMBOL DELETE
-        $(document).on('click', '.btn-delete', function() {
-            let id = $(this).data('id');
-            if(confirm('Are you sure you want to delete logger ' + id + '?')) {
-                $.ajax({
-                    url: `/activations/${id}`,
-                    type: 'DELETE',
-                    success: function(result) {
-                        table.ajax.reload();
-                    }
-                });
+$(document).on('click', '.btn-delete', function() {
+    let id = $(this).data('id'); // Ini mengambil "LOG-001"
+    let btn = $(this);
+
+    if(confirm('Apakah Anda yakin ingin menghapus logger ' + id + '?')) {
+        // Beri efek loading pada tombol
+        btn.prop('disabled', true).html('<i class="ti ti-loader-2 rotate"></i>');
+
+        $.ajax({
+            url: `/activations/${id}`, // Memanggil route activations.destroy
+            type: 'DELETE',
+            success: function(result) {
+                // Notifikasi sukses
+                alert('Logger ' + id + ' berhasil dihapus.');
+
+                // REFRESH TABEL SECARA OTOMATIS
+                table.ajax.reload(null, false);
+            },
+            error: function(xhr) {
+                alert('Gagal menghapus data. Error: ' + xhr.status);
+                btn.prop('disabled', false).html('<i class="ti ti-trash"></i>');
             }
         });
+    }
+    });
     });
 </script>
 @endpush

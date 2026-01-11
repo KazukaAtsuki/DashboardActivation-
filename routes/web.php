@@ -25,5 +25,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/create', [ActivationController::class, 'create'])->name('activations.create');
 
+    // 4. Delete Logger
+    Route::delete('/activations/{id}', [ActivationController::class, 'destroy'])->name('activations.destroy');
 
 });
