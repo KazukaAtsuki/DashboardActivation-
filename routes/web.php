@@ -9,6 +9,9 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Route untuk mendapatkan notifikasi admin
+Route::get('/activations/get-notif', [ActivationController::class, 'getAdminNotifications']);
+
 // --- ROUTE USER LOGIN ---
 Route::middleware(['auth'])->group(function () {
 
@@ -16,6 +19,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return redirect()->route('activations.index');
     });
+
+    Route::post('/activations/start-engine', [ActivationController::class, 'startEngine'])->name('activations.start');
+    Route::post('/activations/stop-engine', [ActivationController::class, 'stopEngine'])->name('activations.stop');
 
     // 2. Resource Activations
     Route::resource('activations', ActivationController::class);

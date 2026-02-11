@@ -19,6 +19,9 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- SWEETALERT2 CDN (Wajib untuk tombol Stop Engine dan Notifikasi) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     /* Global Theme Variables */
     :root {
@@ -27,6 +30,7 @@
         --bg-deep: #020617;
         --card-surface: rgba(15, 23, 42, 0.7);
         --text-bright: #f8fafc;
+        --das-teal: #009688;
     }
 
     body {
@@ -42,12 +46,13 @@
         background-size: 100% 100%, 40px 40px, 40px 40px;
     }
 
-    /* CSS Navbar Ikonik agar terlihat menyatu */
+    /* CSS Navbar Ikonik */
     .app-header-cyber {
         background: rgba(2, 6, 23, 0.85) !important;
         backdrop-filter: blur(15px);
         border-bottom: 1px solid rgba(0, 242, 255, 0.2);
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        z-index: 1050;
     }
 
     .logo-box-header {
@@ -106,6 +111,13 @@
         background: rgba(0, 242, 255, 0.1);
         color: var(--primary-neon);
     }
+
+    /* Animasi putar untuk ikon loading */
+    .rotate {
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   </style>
 
   @stack('styles')
@@ -114,7 +126,7 @@
 <body>
   <div class="page-wrapper" id="main-wrapper">
 
-    <!-- HEADER START (Gunakan ID & Class yang sama dengan CSS di atas) -->
+    <!-- HEADER START -->
     <header class="app-header app-header-cyber fixed-top">
         <nav class="navbar navbar-expand-lg py-2">
           <div class="container-fluid px-4">
@@ -186,13 +198,45 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // Inisialisasi CSRF untuk semua request AJAX secara global
     $(document).ready(function() {
+        // 1. Inisialisasi CSRF secara global
         $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
+
+        // 2. Handler Otomatis Notifikasi SweetAlert dari Backend
+        @if(session('swal_success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'SUCCESS',
+                text: "{{ session('swal_success') }}",
+                background: '#020617',
+                color: '#ffffff',
+                confirmButtonColor: '#00f2ff'
+            });
+        @endif
+
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'DONE',
+                text: "{{ session('success') }}",
+                background: '#020617',
+                color: '#ffffff',
+                confirmButtonColor: '#00f2ff'
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'FAILED',
+                text: "{{ session('error') }}",
+                background: '#020617',
+                color: '#ffffff',
+                confirmButtonColor: '#ef4444'
+            });
+        @endif
     });
   </script>
 
